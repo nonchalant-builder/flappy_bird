@@ -12,7 +12,7 @@ Image frames[14];
 Sprite bird;
 int channel;
 float birdVelocity = 0;
-
+//using enumeration for game condition
 enum GameState
 {
     MENU,
@@ -22,13 +22,14 @@ enum GameState
     SETTINGS,
     EXIT
 };
+//Not needed at this moment
 enum GameDifficulty{
     EASY,
     MEDIUM,
     HARD
 };
-enum GameState currentState = MENU;
-enum GameDifficulty diffculty = EASY;
+enum GameState currentState = MENU;//declaring gamestate through currentState variable
+enum GameDifficulty diffculty = EASY;//for difficllty not needed now
 /*
 function iDraw() is called again and again by the system.
 */
@@ -56,6 +57,7 @@ void iDraw()
         iShowImage(0,0,"assets/images/Instructions.png");
 }
 
+//for drawing pipes..tui eida jeivhabe chas build korsi or onno jevhabe build korte paris
 void InitPipe(){
        if( currentState == PLAYING){
            iSetColor();
@@ -94,7 +96,7 @@ function iMouse() is called when the user presses/releases the mouse.
 void iMouse(int button, int state, int mx, int my)
 {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    {
+    {    //GAME menu part
         if (currentState == MENU)
         {
             if (mx >= 434 && mx <= 570 && my >= 281 && my <= 313)
@@ -111,15 +113,7 @@ void iMouse(int button, int state, int mx, int my)
         else if (currentState == PLAYING)
         {
             birdVelocity = -FLAP_STRENGTH; // Negative velocity to flap upward
-        }
-        
-       
-      
-
-
-
-        
-
+        }  
     }
     if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
     {
@@ -191,6 +185,8 @@ void iSpecialKeyboard(unsigned char key)
         break;
     }
 }
+
+//main game function
 void updateGame()
 {
     if (currentState != PLAYING)
