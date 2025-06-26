@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     iInitializeSound();
     resources();
-    iSetTimer(5, updateGame);
+    iSetTimer(5, updateGame);/*calls the update Game function per 5 milisecond so that the sprite gets called over and over*/
     channel = iPlaySound("assets/sounds/NGGYU.MP3", true, 50);
     iInitialize(S_W, S_H, "Flappy Bird");
 
