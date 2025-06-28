@@ -5,14 +5,19 @@
 
 #define S_W 1000
 #define S_H 560
-#define GRAVITY 3.0f
-#define FLAP_STRENGTH 9.0f
+#define GRAVITY 1.3f
+#define FLAP_STRENGTH 15.0f
 
 Image frames[14];
 Sprite bird;
 int channel;
 float birdVelocity = 0;
-//using enumeration for game condition
+
+double pipeX = 650;
+double pipeY = 0;
+
+
+
 enum GameState
 {
     MENU,
@@ -22,14 +27,13 @@ enum GameState
     SETTINGS,
     EXIT
 };
-//Not needed at this moment
 enum GameDifficulty{
     EASY,
     MEDIUM,
     HARD
 };
-enum GameState currentState = MENU;//declaring gamestate through currentState variable
-enum GameDifficulty diffculty = EASY;//for difficllty not needed now
+enum GameState currentState = MENU;
+enum GameDifficulty diffculty = EASY;
 /*
 function iDraw() is called again and again by the system.
 */
@@ -55,22 +59,22 @@ void iDraw()
     }
     else if(currentState == HELP)
         iShowImage(0,0,"assets/images/Instructions.png");
+        
 }
 
-//for drawing pipes..tui eida jeivhabe chas build korsi or onno jevhabe build korte paris
-void InitPipe(){
+/*void InitPipe(){
        if( currentState == PLAYING){
            iSetColor();
            iRectangle();
 
-       }
+       }*/
 
     
 
 
 
 
-}
+
 /*
 function iMouseMove() is called when the user moves the mouse.
 (mx, my) is the position where the mouse pointer is.
@@ -78,7 +82,7 @@ function iMouseMove() is called when the user moves the mouse.
 void iMouseMove(int mx, int my)
 {
     // place your codes here
-     printf("x = %d, y = %d\n", mx, my);
+    // printf("x = %d, y = %d\n", mx, my);
 }
 
 /*
@@ -96,7 +100,7 @@ function iMouse() is called when the user presses/releases the mouse.
 void iMouse(int button, int state, int mx, int my)
 {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    {    //GAME menu part
+    {
         if (currentState == MENU)
         {
             if (mx >= 434 && mx <= 570 && my >= 281 && my <= 313)
@@ -105,15 +109,27 @@ void iMouse(int button, int state, int mx, int my)
                 iSetSpritePosition(&bird, S_W / 4, S_H / 2);
                 birdVelocity = 0;
             }
-            else if(mx >= 448 && mx <= 552 && my >= 213 && my <= 246)
+            else if(mx >= 448 && mx <= 552 && my >= 213 && my <= 246){
             currentState = HELP;
+            }
             else if(mx >= 457 && mx <= 552 && my >= 77 && my <= 110)
                  exit(0);
         }
         else if (currentState == PLAYING)
         {
             birdVelocity = -FLAP_STRENGTH; // Negative velocity to flap upward
-        }  
+        }
+        
+       else if(currentState == HELP){
+        if(mx >= 14 && mx<= 81 && my >= 531 && my <= 553)
+            currentState = MENU;
+       }
+      
+
+
+
+        
+
     }
     if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
     {
@@ -154,12 +170,11 @@ void iKeyboard(unsigned char key)
     else if (key == 'r' || key == 'R')
 
         iResumeSound(channel);
-
-    else if (key == 's' || key == 'S')
-
-        iStopSound(channel);
-    else if( key == 'b' || key =='B')
+        
+    if( currentState == PLAYING){
+     if( key == 'b' || key =='B')
         currentState = MENU;
+    }
 }
 
 /*
@@ -185,8 +200,6 @@ void iSpecialKeyboard(unsigned char key)
         break;
     }
 }
-
-//main game function
 void updateGame()
 {
     if (currentState != PLAYING)
@@ -223,7 +236,7 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     iInitializeSound();
     resources();
-    iSetTimer(5, updateGame);/*calls the update Game function per 5 milisecond so that the sprite gets called over and over*/
+    iSetTimer(5, updateGame);
     channel = iPlaySound("assets/sounds/NGGYU.MP3", true, 50);
     iInitialize(S_W, S_H, "Flappy Bird");
 
