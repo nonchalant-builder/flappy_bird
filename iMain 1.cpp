@@ -185,6 +185,7 @@ void iKeyboard(unsigned char key)
         }
         else if (currentState == MENU)
         {
+            InitPipe();
             currentState = PLAYING;
             iSetSpritePosition(&bird, S_W / 4, S_H / 2);
             birdVelocity = 0;
