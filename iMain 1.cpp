@@ -79,7 +79,8 @@ void iDraw()
 void InitPipe(){
         for(int i=0;i<pipenumber;i++)
     {
-        pipey[i]=rand()%101+150;
+        pipex[i]=S_W+i*pipespace;
+        pipey[i]=rand()%201+100;
     }
 
 }
@@ -91,8 +92,16 @@ void movepipes()
         pipex[i]-=2;
         if(pipex[i]+pipewidth<0)
         {
-            pipex[i]=S_W+pipespace;
-            pipey[i]=rand()%101+150;
+            int lastpipe=pipex[0];
+            for(int j=0;j<pipenumber;j++)
+            {
+                if(pipex[j]>lastpipe)
+                {
+                    lastpipe=pipex[j];
+                }
+            }
+            pipex[i]=lastpipe+pipespace;
+            pipey[i]=rand()%201+100;
         }
     }
 }
@@ -255,6 +264,7 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     iInitializeSound();
     resources();
+    InitPipe();
     iSetTimer(5, updateGame);
     iSetTimer(16,movepipes);
     channel = iPlaySound("assets/sounds/NGGYU.MP3", true, 50);
