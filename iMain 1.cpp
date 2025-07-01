@@ -10,7 +10,7 @@
 #define FLAP_STRENGTH 9.0f
 #define pipewidth 50
 #define pipespace 250
-#define pipegap 120
+#define pipegap 140
 #define pipenumber 4
 
 
@@ -79,7 +79,7 @@ void iDraw()
 void InitPipe(){
         for(int i=0;i<pipenumber;i++)
     {
-        pipey[i]=rand()%101+160;
+        pipey[i]=rand()%101+150;
     }
 
 }
