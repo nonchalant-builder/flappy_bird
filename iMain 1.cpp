@@ -92,7 +92,7 @@ void movepipes()
         if(pipex[i]+pipewidth<0)
         {
             pipex[i]=S_W+pipespace;
-            pipey[i]=rand()%121+180;
+            pipey[i]=rand()%101+150;
         }
     }
 }
