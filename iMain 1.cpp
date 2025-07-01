@@ -135,6 +135,7 @@ void iMouse(int button, int state, int mx, int my)
         {
             if (mx >= 434 && mx <= 570 && my >= 281 && my <= 313)
             {
+                InitPipe();
                 currentState = PLAYING;
                 iSetSpritePosition(&bird, S_W / 4, S_H / 2);
                 birdVelocity = 0;
