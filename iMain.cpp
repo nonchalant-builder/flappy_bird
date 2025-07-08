@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
     iSetTimer(5, updateGame);
     iSetTimer(16, movepipes);
     channel = iPlaySound("assets/sounds/NGGYU.MP3", true, 50);
-    iInitialize(S_W, S_H - 10, "Flappy Bird");
+    iInitialize(S_W, S_H, "Flappy Bird");
 
     return 0;
 
