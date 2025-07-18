@@ -14,11 +14,11 @@ int channel;
 float birdVelocity = 0;
 
 #define pipewidth 50
-#define pipespace 250
+#define pipespace 350
 #define pipegap 132
 #define pipenumber 4
 
-int pipex[pipenumber] = {190, 440, 690, 940};
+int pipex[pipenumber];
 int pipey[pipenumber];
 int pipemove;
 float PIPESPEED;
@@ -77,24 +77,39 @@ void iDraw() {
     }
 }
 
+void InitPipe()
+{
+    for (int i = 0; i < pipenumber; i++)
+        {
+             pipex[i] = S_W + i * pipespace;
+             pipey[i] = rand() % 201 + 100;
+        }
+}
+
+
+
 void movepipes()
 {
     for (int i = 0; i < pipenumber; i++)
     {
         pipex[i] -= PIPESPEED;
-        if (pipex[i] + pipewidth < 0)
+
+    if (pipex[i] + pipewidth < 0)
         {
-            int lastpipe = pipex[0];
+            int rightmost = pipex[0];
             for (int j = 1; j < pipenumber; j++)
             {
-                if (pipex[j] > lastpipe)
+                if (pipex[j] > rightmost)
                 {
-                    lastpipe = pipex[j];
+                    rightmost = pipex[j];
                 }
             }
-            pipex[i] = lastpipe + pipespace;
-            pipey[i] = rand() % 201 + 100;
+            pipex[nextpipeindex] = rightmost + pipespace;
+            pipey[nextpipeindex] = rand() % 201 + 100;
+
+            nextpipeindex=(nextpipeindex+1)%pipenumber;
         }
+
     }
 }
 
@@ -245,12 +260,7 @@ void updateGame()
         birdVelocity = 0;
     }
 }
-void InitPipe() {
-    for (int i = 0; i < pipenumber; i++) {
-        pipex[i] = S_W + i * pipespace;
-        pipey[i] = rand() % 201 + 100;
-    }
-}
+
 
 void resources()
 {
