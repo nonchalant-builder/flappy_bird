@@ -85,7 +85,7 @@ void movepipes()
         if (pipex[i] + pipewidth < 0)
         {
             int lastpipe = pipex[0];
-            for (int j = 0; j < pipenumber; j++)
+            for (int j = 1; j < pipenumber; j++)
             {
                 if (pipex[j] > lastpipe)
                 {
