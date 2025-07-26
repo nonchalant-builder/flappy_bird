@@ -59,13 +59,13 @@ void loadHighScore()
     {
         if (fscanf(fp, "%d", &highscore) != 1)
         {
-            highscore = 0; // Set to 0 if reading fails
+            highscore = 0; 
         }
         fclose(fp);
     }
     else
     {
-        highscore = 0; // Initialize to 0 if file doesn't exist
+        highscore = 0;
     }
 }
 
@@ -163,8 +163,8 @@ void checkCollision()
                 iPlaySound("assets/sounds/hit.mp3", false);
                 if (score > highscore)
                 {
-                    highscore = score; // Update high score
-                    saveHighScore();   // Save to file
+                    highscore = score;
+                    saveHighScore();  
                 }
                 currentState = GAME_OVER;
                 return;
@@ -178,8 +178,8 @@ void checkCollision()
         iStopSound(channel);
         if (score > highscore)
                 {
-                    highscore = score; // Update high score
-                    saveHighScore();   // Save to file
+                    highscore = score; 
+                    saveHighScore();   
                 }
         currentState = GAME_OVER;
         return;
@@ -194,7 +194,7 @@ void resetGame()
     nextpipeindex = 0;
     for (int i = 0; i < pipenumber; i++)
     {
-        pipex[i] = S_W + i * pipespace; // Initialize pipes at consistent intervals
+        pipex[i] = S_W + i * pipespace; 
         pipey[i] = rand() % 201 + 100;
         scoredPipe[i] = false;
     }
@@ -209,7 +209,7 @@ void movepipes()
     {
         pipex[i] -= PIPESPEED;
 
-        // Score when bird passes pipe
+       
         if (!scoredPipe[i] && bird.x > pipex[i] + pipewidth)
         {
             score++;
@@ -218,7 +218,7 @@ void movepipes()
 
         if (pipex[i] + pipewidth < 0)
         {
-            // Find the rightmost on-screen pipe
+            
             int rightmost = S_W; // Default to screen width if no pipes are on-screen
             bool found = false;
             for (int j = 0; j < pipenumber; j++)
@@ -231,7 +231,7 @@ void movepipes()
             }
             if (!found)
             {
-                rightmost = S_W; // Ensure new pipe starts at the right edge
+                rightmost = S_W; 
             }
             pipex[i] = rightmost + pipespace;
             pipey[i] = rand() % 201 + 100;
