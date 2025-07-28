@@ -2,6 +2,7 @@
 #include "iSound.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define S_W 1000
 #define S_H 560
@@ -15,6 +16,7 @@ float birdVelocity = 0;
 #define pipewidth 50
 #define pipespace 350
 #define pipenumber 4
+#define maxtopplayers 3
 
 int pipegap;
 int nextpipeindex;
@@ -27,11 +29,24 @@ float GRAVITY;
 int highscore;
 char SCORE[20];
 int score = 0;
+char playerName[20];
+int namelength=0;
 bool scoredPipe[pipenumber]; // Track which pipes have been scored
+
+typedef struct
+{
+    char name[20];
+    int score;
+}
+TopPlayer;
+
+TopPlayer topPlayers[maxtopplayers];
+int newHighScorePosition=-1;
 
 enum GameState
 {
     MENU,
+    INPUT_NAME,
     PLAYING,
     HELP,
     SETTINGS,
@@ -59,7 +74,7 @@ void loadHighScore()
     {
         if (fscanf(fp, "%d", &highscore) != 1)
         {
-            highscore = 0; 
+            highscore = 0;
         }
         fclose(fp);
     }
@@ -81,6 +96,40 @@ void saveHighScore()
     }
 }
 
+void loadTopPlayers()
+{
+    FILE *fp=fopen("topplayers.txt","r");
+    if(fp!=NULL)
+    {
+        for(int i=0;i<maxtopplayers;i++)
+        {
+            fscanf(fp,"%s%d",topPlayers[i].name,&topPlayers[i].score);
+        }
+        fclose(fp);
+    }
+    else
+    {
+        for(int i=0;i<maxtopplayers;i++)
+        {
+            strcpy(topPlayers[i].name,"---");
+            topPlayers[i].score=0;
+        }
+    }
+}
+
+void saveTopPlayers()
+{
+    FILE *fp=fopen("topplayers.txt","w");
+    if(fp!=NULL)
+    {
+        for(int i=0;i<maxtopplayers;i++)
+        {
+            fprintf(fp,"%s%d\n",topPlayers[i].name,topPlayers[i].score);
+        }
+        fclose(fp);
+    }
+}
+
 void iDraw()
 {
     iClear();
@@ -91,6 +140,12 @@ void iDraw()
     else if (currentState == SELECT_DIFFICULTY)
     {
         iShowImage(0, 0, "assets/images/DifficultyPage.png");
+    }
+    else if(currentState==INPUT_NAME)
+    {
+        iShowImage(0,0,"assets/images/NameInputScreen.png");
+        iSetColor(0,0,0);
+        iText(475,285,playerName,GLUT_BITMAP_HELVETICA_18);
     }
     else if (currentState == PLAYING)
     {
@@ -139,14 +194,37 @@ void iDraw()
     else if (currentState == GAME_OVER)
     {
         iShowImage(0, 0, "assets/images/Gameover.png");
-        iSetColor(34, 160, 191);
+
         char scoreText[50];
-        char highscoreText[50];
-        sprintf(scoreText, "%d", score);
-        sprintf(highscoreText, "%d", highscore);
-        iTextAdvanced(460, 179, scoreText, 0.5, 4.5);
-        iSetColor(235, 52, 23);
-        iTextAdvanced(460, 290, highscoreText, 0.5, 4.5); 
+        sprintf(scoreText,"%s:%d",playerName,score);
+        iSetColor(255,255,255);
+        iText(420,340,scoreText,GLUT_BITMAP_HELVETICA_18);
+
+        if(newHighScorePosition==0)
+        {
+            iText(400,310,"New 1st High Score!",GLUT_BITMAP_TIMES_ROMAN_24);
+        }
+        else if(newHighScorePosition==1)
+        {
+            iText(400,310,"New 2nd High Score!",GLUT_BITMAP_TIMES_ROMAN_24);
+        }
+        else if (newHighScorePosition==2)
+        {
+            iText(400,310,"New 3rd High Score!",GLUT_BITMAP_TIMES_ROMAN_24);
+        }
+
+        iSetColor(255,255,255);
+        iText(350,270,"TOP PLAYERS",GLUT_BITMAP_HELVETICA_18);
+
+        for(int i=0;i<maxtopplayers;i++)
+        {
+            iText(350,250-i*25,topPlayers[i].name,GLUT_BITMAP_HELVETICA_18);
+
+            char s[10];
+            sprintf(s,"%d",topPlayers[i].score);
+            iText(550,250-i*25,s,GLUT_BITMAP_HELVETICA_18);
+        }
+        iText(30,30,"Press B to return to menu",GLUT_BITMAP_HELVETICA_12);
     }
 }
 void checkCollision()
@@ -164,9 +242,25 @@ void checkCollision()
                 if (score > highscore)
                 {
                     highscore = score;
-                    saveHighScore();  
+                    saveHighScore();
                 }
                 currentState = GAME_OVER;
+                newHighScorePosition=-1;
+                for(int i=0;i<maxtopplayers;i++)
+                {
+                    if(score>topPlayers[i].score)
+                    {
+                        for (int j=maxtopplayers-1;j>i;j--)
+                        {
+                            topPlayers[j]=topPlayers[j-1];
+                        }
+                        strcpy(topPlayers[i].name,playerName);
+                        topPlayers[i].score=score;
+                        newHighScorePosition=i;
+                        break;
+                    }
+                }
+                saveTopPlayers();
                 return;
             }
         }
@@ -178,8 +272,8 @@ void checkCollision()
         iStopSound(channel);
         if (score > highscore)
                 {
-                    highscore = score; 
-                    saveHighScore();   
+                    highscore = score;
+                    saveHighScore();
                 }
         currentState = GAME_OVER;
         return;
@@ -194,7 +288,7 @@ void resetGame()
     nextpipeindex = 0;
     for (int i = 0; i < pipenumber; i++)
     {
-        pipex[i] = S_W + i * pipespace; 
+        pipex[i] = S_W + i * pipespace;
         pipey[i] = rand() % 201 + 100;
         scoredPipe[i] = false;
     }
@@ -209,7 +303,7 @@ void movepipes()
     {
         pipex[i] -= PIPESPEED;
 
-       
+
         if (!scoredPipe[i] && bird.x > pipex[i] + pipewidth)
         {
             score++;
@@ -218,7 +312,7 @@ void movepipes()
 
         if (pipex[i] + pipewidth < 0)
         {
-            
+
             int rightmost = S_W; // Default to screen width if no pipes are on-screen
             bool found = false;
             for (int j = 0; j < pipenumber; j++)
@@ -231,7 +325,7 @@ void movepipes()
             }
             if (!found)
             {
-                rightmost = S_W; 
+                rightmost = S_W;
             }
             pipex[i] = rightmost + pipespace;
             pipey[i] = rand() % 201 + 100;
@@ -271,7 +365,9 @@ void iMouse(int button, int state, int mx, int my)
             if (mx >= 434 && mx <= 564 && my >= 325 && my <= 354)
             {
                 iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
-                currentState = SELECT_DIFFICULTY;
+                currentState = INPUT_NAME;
+                playerName[0]='\0';
+                namelength=0;
             }
             else if (mx >= 452 && mx <= 545 && my >= 202 && my <= 229)
             {
@@ -354,6 +450,30 @@ key- holds the ASCII value of the key pressed.
 */
 void iKeyboard(unsigned char key)
 {
+    if(currentState==INPUT_NAME)
+    {
+        if(key=='\r')
+        {
+            currentState=SELECT_DIFFICULTY;
+        }
+        else if(key=='\b')
+        {
+            if(namelength>0)
+            {
+               namelength--;
+                playerName[namelength]='\0';
+            }
+        }
+        else if(namelength < 19 && key >= 32 && key <= 126)
+
+        {
+            playerName[namelength++]=key;
+            playerName[namelength]='\0';
+        }
+        return;
+
+    }
+
     if (key == ' ')
     {
         if (currentState == PLAYING)
@@ -445,6 +565,7 @@ int main(int argc, char *argv[])
     iInitializeSound();
     resources();
      loadHighScore();
+     loadTopPlayers();
     iSetTimer(10, updateGame);
     iSetTimer(16, movepipes);
     iInitialize(S_W, S_H, "Flappy Bird");
