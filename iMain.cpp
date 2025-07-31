@@ -280,7 +280,7 @@ void checkCollision()
 
     if (bird.y <= 0)
     {
-        iPlaySound("assets/sounds/Music/die.wav", false);
+        iPlaySound("assets/sounds/die.wav", false);
         iStopSound(channel);
         if (score > scores[2])
                 {
