@@ -378,12 +378,12 @@ void iMouse(int button, int state, int mx, int my)
         {    
             if (mx >= 434 && mx <= 564 && my >= 325 && my <= 354)
             {
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 currentState = SELECT_DIFFICULTY;
             }
             else if (mx >= 452 && mx <= 545 && my >= 202 && my <= 229)
             {
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 currentState = HELP;
             }
             else if (mx >= 458 && mx <= 544 && my >= 77 && my <= 102)
@@ -392,12 +392,12 @@ void iMouse(int button, int state, int mx, int my)
             }
             else if (mx >= 356 && mx <= 643 && my >= 264 && my <= 294)
             {
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 currentState = LEADERBOARD;
             }
             else if (mx >= 428 && mx <= 574 && my >= 138 && my <= 165)
             {
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 currentState = CREDIT;
             }
         }
@@ -406,11 +406,11 @@ void iMouse(int button, int state, int mx, int my)
             if (mx >= 14 && mx <= 86 && my >= 534 && my <= 543)
             {
                 currentState = MENU;
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
             }
             else if (mx >= 437 && mx <= 554 && my >= 283 && my <= 319)
             {
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 difficulty = EASY;
                 channel = iPlaySound("assets/sounds/EASY.mp3", true);
                 currentState = PLAYING;
@@ -418,7 +418,7 @@ void iMouse(int button, int state, int mx, int my)
             }
             else if (mx >= 408 && mx <= 586 && my >= 222 && my <= 250)
             {
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 difficulty = MEDIUM;
                 channel = iPlaySound("assets/sounds/Medium.mp3", true);
                 currentState = PLAYING;
@@ -427,7 +427,7 @@ void iMouse(int button, int state, int mx, int my)
             else if (mx >= 437 && mx <= 556 && my >= 158 && my <= 182)
             {   
                 difficulty = HARD;
-                iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+                iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 channel = iPlaySound("assets/sounds/Hard.mp3", true);
                 currentState = PLAYING;
                 resetGame();
@@ -442,7 +442,7 @@ void iMouse(int button, int state, int mx, int my)
         {
             
             if (mx >=  16 && mx <= 110 && my >= 528 && my <= 542)
-            {iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+            {iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 currentState = MENU;
             }
         }
@@ -450,13 +450,13 @@ void iMouse(int button, int state, int mx, int my)
         {
             
             if (mx >=  14 && mx <= 101 && my >= 529 && my <= 540)
-            {iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+            {iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 currentState = MENU;
             }
         }
         else if( currentState == GAME_OVER || currentState == LEADERBOARD){
             if (mx >=  9 && mx <= 138 && my >= 530 && my <= 543)
-            {iPlaySound("assets/sounds/Music/click-tap-computer-mouse-352734.mp3", false);
+            {iPlaySound("assets/sounds/click-tap-computer-mouse-352734.mp3", false);
                 currentState = MENU;
             }
         }
